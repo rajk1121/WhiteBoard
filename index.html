@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>White Board</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
+        integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
+    <style>
+        * {
+            margin: 0;
+            overflow: hidden;
+        }
+
+
+        i {
+            margin: 2rem;
+            transition: transform 0.2s;
+        }
+
+        i:hover {
+            color: pink;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+
+
+<body>
+    <i class="fas fa-pen-alt fa-5x"></i>
+    <i class="fas fa-eraser fa-5x"></i>
+    <canvas onmousedown="draw()" onmousemove="move()" onmouseup="stop()" class="board"></canvas>
+
+    <script>
+        var board = document.querySelector('.board');
+        var arr = [
+            {
+                'element': document.querySelector('.fa-pen-alt'),
+                'selected': false
+            },
+            {
+
+                'element': document.querySelector('.fa-eraser'),
+                'selected': false
+            }
+        ];
+        var toDraw = false;
+        var width = board.width = window.innerWidth;
+        var height = board.height = window.innerHeight;
+        var ctx = board.getContext("2d");
+        ctx.lineWidth = 5;
+        //draw rectangle
+        // ctx.fillStyle = 'rgb(0, 0, 0)';
+        //ctx.fillRect(0, 0, 200, 200);
+        //  ctx.strokeStyle = 'green';
+        //    ctx.strokeRect(200, 200, 400, 400);
+        //draw line
+        //  ctx.beginPath(0, 0);
+        // ctx.moveTo(800, 400)
+        // ctx.lineTo(600, 600)
+        //ctx.moveTo(600, 600)
+        //ctx.lineTo(1000, 600)
+
+        //ctx.moveTo(1000, 600)
+        //ctx.lineTo(800, 400)
+
+        //ctx.stroke()
+        //draw a circle
+        function degTorad(degree) {
+            return Math.PI * degree / 180
+        }
+        //ctx.beginPath();
+        //ctx.moveTo(1000, 200)
+        //ctx.arc(800, 100, 50, degTorad(0), degTorad(360), false)
+        //ctx.stroke()
+        //var pen = document.querySelector('.fa-pen-alt');
+        //var eraser = document.querySelector('fa-eraser');
+
+        var previouslocation = {};
+        arr[0].element.addEventListener('click', () => {
+
+            if (!arr[0].selected) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].selected) {
+                        arr[i].selected = false;
+                        arr[i].element.style.color = 'black'
+                    }
+                }
+                arr[0].selected = true;
+                arr[0].element.style.color = 'pink';
+            } else {
+                arr[0].selected = false;
+
+                arr[0].element.style.color = 'black';
+            }
+
+        })
+        arr[1].element.addEventListener('click', () => {
+
+            if (!arr[1].selected) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].selected) {
+                        arr[i].selected = false;
+                        arr[i].element.style.color = 'black'
+                    }
+                }
+                arr[1].selected = true;
+                arr[1].element.style.color = 'pink';
+            } else {
+                arr[1].selected = false;
+
+                arr[1].element.style.color = 'black';
+            }
+
+
+        })
+
+        function draw() {
+            toDraw = true;
+            var rect = board.getBoundingClientRect();
+            previouslocation.x = event.clientX - rect.left;
+            previouslocation.y = event.clientY - rect.top;
+
+        }
+        function move() {
+            if (toDraw) {
+                if (arr[0].selected) {
+                    var rect = board.getBoundingClientRect();
+
+                    ctx.beginPath();
+                    ctx.moveTo(previouslocation.x, previouslocation.y);
+
+                    ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+                    previouslocation.x = event.clientX - rect.left;
+                    previouslocation.y = event.clientY - rect.top;
+
+
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                else if (arr[1].selected) {
+                    var rect = board.getBoundingClientRect();
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 15;
+                    ctx.beginPath();
+
+                    ctx.moveTo(previouslocation.x, previouslocation.y);
+
+                    ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+                    previouslocation.x = event.clientX - rect.left;
+                    previouslocation.y = event.clientY - rect.top;
+
+
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+            }
+        }
+        function stop() {
+            toDraw = false;
+        }
+
+    </script>
+</body>
+
+</html>
