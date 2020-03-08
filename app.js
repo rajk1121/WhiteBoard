@@ -6,7 +6,7 @@ app.get('', (req, res) => {
     res.status(200).write(index);
     res.end();
 })
-const PORT = 8000 || process.env.PORT;;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, (req, res) => {
     console.log("Server started")
 })
