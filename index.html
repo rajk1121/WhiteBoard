@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>White Board</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
         integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
@@ -24,6 +25,11 @@
             color: pink;
             transform: scale(1.3);
         }
+
+        .top-right {
+            float: right;
+            padding: 15px;
+        }
     </style>
 </head>
 
@@ -31,9 +37,18 @@
 <body>
     <i class="fas fa-pen-alt fa-5x"></i>
     <i class="fas fa-eraser fa-5x"></i>
+    <div class="top-right">
+        <a href='' onclick="callRed()" style="color: red;" class="top-right">Red</a>
+        <a href='' onclick="callPink()" style="color: pink;" class="top-right">Pink</a>
+        <a href='' onclick="callGreen()" style="color: green;" class="top-right">Green</a>
+        <a href='' onclick="callBlack()" style="color: black;" class="top-right">Black</a></div>
     <canvas onmousedown="draw()" onmousemove="move()" onmouseup="stop()" class="board"></canvas>
 
     <script>
+        $('a').click(function () {
+            console.log("ddvd");
+            return false;
+        })
         var board = document.querySelector('.board');
         var arr = [
             {
@@ -71,6 +86,10 @@
         function degTorad(degree) {
             return Math.PI * degree / 180
         }
+        var red = false;
+        var pink = false;
+        var green = false;
+        var black = true;
         //ctx.beginPath();
         //ctx.moveTo(1000, 200)
         //ctx.arc(800, 100, 50, degTorad(0), degTorad(360), false)
@@ -136,14 +155,22 @@
                     previouslocation.x = event.clientX - rect.left;
                     previouslocation.y = event.clientY - rect.top;
 
-
+                    if (red) {
+                        ctx.strokeStyle = "red";
+                    } else if (pink) {
+                        ctx.strokeStyle = "pink";
+                    } else if (green) {
+                        ctx.strokeStyle = "green";
+                    } else {
+                        ctx.strokeStyle = "black";
+                    }
                     ctx.stroke();
                     ctx.closePath();
                 }
                 else if (arr[1].selected) {
                     var rect = board.getBoundingClientRect();
                     ctx.strokeStyle = 'white';
-                    ctx.lineWidth = 15;
+                    ctx.lineWidth = 50;
                     ctx.beginPath();
 
                     ctx.moveTo(previouslocation.x, previouslocation.y);
@@ -158,6 +185,31 @@
                 }
             }
         }
+        function callBlack() {
+            red = false;
+            pink = false;
+            green = false;
+            black = true;
+        }
+        function callRed() {
+            red = true;
+            pink = false;
+            green = false;
+            black = false;
+        }
+        function callPink() {
+            red = false;
+            pink = true;
+            green = false;
+            black = false;
+        }
+        function callGreen() {
+            red = false;
+            pink = false;
+            green = true;
+            black = false;
+        }
+
         function stop() {
             toDraw = false;
         }
